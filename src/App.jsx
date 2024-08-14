@@ -1,6 +1,7 @@
 // src/App.jsx
 import { useState } from 'react'
 import './App.css'
+import Calculator from './components/Calculator'
 
 const apps = [
   { id: 'calculator', name: 'Calculator', icon: '🧮' },
@@ -8,7 +9,7 @@ const apps = [
   { id: 'timer', name: 'Timer', icon: '⏲️' },
   { id: 'stopwatch', name: 'Stopwatch', icon: '⏱️' },
   { id: 'clock', name: 'Clock', icon: '🕰️' },
-  // Add more apps here to fill the screen...
+  // Ill add more apps here as they are developed 
 ];
 
 const SearchBar = () => (
@@ -39,14 +40,18 @@ function App() {
     setActiveApp(appId)
   }
 
+  const closeApp = () => {
+    setActiveApp(null)
+  }
+
   return (
     <div className="dashboard">
       <SearchBar />
       <main className="dashboard-main">
         {activeApp ? (
           <div className="app-container">
-            <p>App {activeApp} is running</p>
-            <button onClick={() => setActiveApp(null)}>Close App</button>
+            {activeApp === 'calculator' && <Calculator onClose={closeApp} />}
+            {/* Ill add other app components here as they are developed */}
           </div>
         ) : (
           <div className="app-grid">
