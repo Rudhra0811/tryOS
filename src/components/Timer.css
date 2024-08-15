@@ -35,14 +35,26 @@
     background-color: #2D2D2D;
   }
   
-  .timer-controls {
+  .timer-input {
     display: flex;
     justify-content: space-around;
-    padding: 20px;
+    padding: 10px;
+    background-color: #3D3D3D;
   }
   
+  .timer-input input {
+    width: 50px;
+    padding: 5px;
+    font-size: 16px;
+    background-color: #2D2D2D;
+    border: 1px solid #4D4D4D;
+    color: white;
+    text-align: center;
+  }
+  
+  .timer-input button,
   .timer-controls button {
-    padding: 10px 20px;
+    padding: 5px 10px;
     font-size: 16px;
     color: white;
     background-color: #4E4E4E;
@@ -52,10 +64,18 @@
     transition: background-color 0.2s;
   }
   
+  .timer-controls {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+  }
+  
+  .timer-input button:hover,
   .timer-controls button:hover {
     background-color: #5E5E5E;
   }
   
+  .timer-input button:active,
   .timer-controls button:active {
     background-color: #3E3E3E;
   }
