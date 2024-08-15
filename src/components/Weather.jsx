@@ -2,33 +2,40 @@ import React, { useState, useEffect } from 'react';
 import './Weather.css';
 
 const API_KEY = 'bd827b5dd33b1072cde8dac5cab15ada';
-const CITY = 'London';
 
 const Weather = ({ onClose }) => {
     const [weatherData, setWeatherData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [city, setCity] = useState('London');
 
     useEffect(() => {
-        const fetchWeather = async () => {
-            try {
-                const response = await fetch(
-                    `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${API_KEY}&units=metric`
-                );
-                if (!response.ok) {
-                    throw new Error('Weather data not available');
-                }
-                const data = await response.json();
-                setWeatherData(data);
-                setLoading(false);
-            } catch (err) {
-                setError('Failed to fetch weather data');
-                setLoading(false);
-            }
-        };
+        fetchWeather(city);
+    }, [city]);
 
-        fetchWeather();
-    }, []);
+    const fetchWeather = async (cityName) => {
+        setLoading(true);
+        try {
+            const response = await fetch(
+                `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}&units=metric`
+            );
+            if (!response.ok) {
+                throw new Error('Weather data not available');
+            }
+            const data = await response.json();
+            setWeatherData(data);
+            setLoading(false);
+        } catch (err) {
+            setError('Failed to fetch weather data');
+            setLoading(false);
+        }
+    };
+
+    const handleCityChange = (e) => {
+        if (e.key === 'Enter') {
+            setCity(e.target.value);
+        }
+    };
 
     if (loading) return <div className="weather-app">Loading...</div>;
     if (error) return <div className="weather-app">Error: {error}</div>;
@@ -37,7 +44,17 @@ const Weather = ({ onClose }) => {
 
     return (
         <div className="weather-app">
-            <button className="close-button" onClick={onClose}>×</button>
+            <div className="calculator-titlebar">
+                <div className="titlebar-button red" onClick={onClose}></div>
+                <div className="titlebar-button yellow"></div>
+                <div className="titlebar-button green"></div>
+            </div>
+            <input
+                type="text"
+                placeholder="Enter city name"
+                onKeyPress={handleCityChange}
+                className="city-input"
+            />
             <h1>{name}</h1>
             <div className="weather-main">
                 <img
