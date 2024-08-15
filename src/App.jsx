@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import Calculator from './components/Calculator'
 import Weather from './components/Weather'
+import Timer from './components/Timer'
 
 const apps = [
   { id: 'calculator', name: 'Calculator', icon: '🧮' },
@@ -51,6 +52,7 @@ function App() {
           <div className="app-container">
             {activeApp === 'calculator' && <Calculator onClose={closeApp} />}
             {activeApp === 'weather' && <Weather onClose={closeApp} />}
+            {activeApp === 'timer' && <Timer onClose={closeApp} />}
           </div>
         ) : (
           <div className="app-grid">
