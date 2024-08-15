@@ -3,6 +3,7 @@ import './App.css'
 import Calculator from './components/Calculator'
 import Weather from './components/Weather'
 import Timer from './components/Timer'
+import Stopwatch from './components/Stopwatch'
 
 const apps = [
   { id: 'calculator', name: 'Calculator', icon: '🧮' },
@@ -53,6 +54,7 @@ function App() {
             {activeApp === 'calculator' && <Calculator onClose={closeApp} />}
             {activeApp === 'weather' && <Weather onClose={closeApp} />}
             {activeApp === 'timer' && <Timer onClose={closeApp} />}
+            {activeApp === 'stopwatch' && <Stopwatch onClose={closeApp} />}
           </div>
         ) : (
           <div className="app-grid">
