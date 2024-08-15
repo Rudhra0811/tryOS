@@ -1,7 +1,7 @@
-// src/App.jsx
 import { useState } from 'react'
 import './App.css'
 import Calculator from './components/Calculator'
+import Weather from './components/Weather'
 
 const apps = [
   { id: 'calculator', name: 'Calculator', icon: '🧮' },
@@ -9,29 +9,7 @@ const apps = [
   { id: 'timer', name: 'Timer', icon: '⏲️' },
   { id: 'stopwatch', name: 'Stopwatch', icon: '⏱️' },
   { id: 'clock', name: 'Clock', icon: '🕰️' },
-  // Ill add more apps here as they are developed 
 ];
-
-const SearchBar = () => (
-  <div className="search-bar">
-    <input type="text" placeholder="Search" />
-  </div>
-);
-
-const AppIcon = ({ app, onClick }) => (
-  <div className="app-icon" onClick={() => onClick(app.id)}>
-    <span className="app-icon-emoji">{app.icon}</span>
-    <span className="app-icon-name">{app.name}</span>
-  </div>
-);
-
-const Dock = ({ apps, onClick }) => (
-  <div className="dock">
-    {apps.map(app => (
-      <AppIcon key={app.id} app={app} onClick={onClick} />
-    ))}
-  </div>
-);
 
 function App() {
   const [activeApp, setActiveApp] = useState(null)
@@ -44,6 +22,27 @@ function App() {
     setActiveApp(null)
   }
 
+  const SearchBar = () => (
+    <div className="search-bar">
+      <input type="text" placeholder="Search" />
+    </div>
+  );
+
+  const AppIcon = ({ app, onClick }) => (
+    <div className="app-icon" onClick={() => onClick(app.id)}>
+      <span className="app-icon-emoji">{app.icon}</span>
+      <span className="app-icon-name">{app.name}</span>
+    </div>
+  );
+
+  const Dock = ({ apps, onClick }) => (
+    <div className="dock">
+      {apps.map(app => (
+        <AppIcon key={app.id} app={app} onClick={onClick} />
+      ))}
+    </div>
+  );
+
   return (
     <div className="dashboard">
       <SearchBar />
@@ -51,7 +50,7 @@ function App() {
         {activeApp ? (
           <div className="app-container">
             {activeApp === 'calculator' && <Calculator onClose={closeApp} />}
-            {/* Ill add other app components here as they are developed */}
+            {activeApp === 'weather' && <Weather onClose={closeApp} />}
           </div>
         ) : (
           <div className="app-grid">
