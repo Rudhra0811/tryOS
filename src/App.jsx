@@ -6,6 +6,7 @@ import Weather from './components/Weather';
 import Timer from './components/Timer';
 import Stopwatch from './components/Stopwatch';
 import Clock from './components/Clock';
+import Reminders from './components/Reminders';
 import AppWindow from './components/AppWindow';
 
 const apps = [
@@ -14,6 +15,7 @@ const apps = [
   { id: 'timer', name: 'Timer', icon: '⏲️' },
   { id: 'stopwatch', name: 'Stopwatch', icon: '⏱️' },
   { id: 'clock', name: 'Clock', icon: '🕰️' },
+  { id: 'reminders', name: 'Reminders', icon: '📝' },
 ];
 
 const SearchBar = () => (
@@ -64,6 +66,7 @@ function App() {
       case 'timer': return <Timer onClose={closeApp} />;
       case 'stopwatch': return <Stopwatch onClose={closeApp} />;
       case 'clock': return <Clock onClose={closeApp} />;
+      case 'reminders': return <Reminders onClose={closeApp} />;
       default: return null;
     }
   };
