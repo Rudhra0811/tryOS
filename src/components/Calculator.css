@@ -1,7 +1,7 @@
 /* src/components/Calculator.css */
 .calculator-scientific {
     width: 640px;
-    background-color: #3A3A3A;
+    background-color: #1C1C1C;
     border-radius: 10px;
     overflow: hidden;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -21,6 +21,7 @@
     height: 12px;
     border-radius: 50%;
     margin-right: 8px;
+    cursor: pointer;
 }
 
 .titlebar-button.red {
@@ -36,7 +37,7 @@
 }
 
 .calculator-display {
-    background-color: #2D2D2D;
+    background-color: #1C1C1C;
     color: white;
     font-size: 48px;
     text-align: right;
@@ -50,10 +51,6 @@
     gap: 1px;
     background-color: #1C1C1C;
     padding: 1px;
-}
-
-.keypad-row {
-    display: contents;
 }
 
 .calculator-key {
@@ -87,6 +84,6 @@
     background-color: #E08900;
 }
 
-.key-equals {
+.key-0 {
     grid-column: span 2;
 }
