@@ -1,11 +1,17 @@
-import React, { useState, useRef } from 'react';
+// src/components/VoiceRecorder.jsx
+import React, { useState, useRef, useEffect } from 'react';
 import './VoiceRecorder.css';
 
 const VoiceRecorder = ({ onClose, onMinimize }) => {
     const [isRecording, setIsRecording] = useState(false);
-    const [audioURL, setAudioURL] = useState('');
+    const [recordings, setRecordings] = useState([]);
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
+
+    useEffect(() => {
+        const savedRecordings = JSON.parse(localStorage.getItem('voiceRecordings')) || [];
+        setRecordings(savedRecordings);
+    }, []);
 
     const startRecording = async () => {
         try {
@@ -21,7 +27,14 @@ const VoiceRecorder = ({ onClose, onMinimize }) => {
             mediaRecorderRef.current.onstop = () => {
                 const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
                 const audioUrl = URL.createObjectURL(audioBlob);
-                setAudioURL(audioUrl);
+                const newRecording = {
+                    id: Date.now(),
+                    url: audioUrl,
+                    name: `Recording ${recordings.length + 1}`,
+                };
+                const updatedRecordings = [...recordings, newRecording];
+                setRecordings(updatedRecordings);
+                localStorage.setItem('voiceRecordings', JSON.stringify(updatedRecordings));
                 audioChunksRef.current = [];
             };
 
@@ -39,6 +52,12 @@ const VoiceRecorder = ({ onClose, onMinimize }) => {
         }
     };
 
+    const deleteRecording = (id) => {
+        const updatedRecordings = recordings.filter(recording => recording.id !== id);
+        setRecordings(updatedRecordings);
+        localStorage.setItem('voiceRecordings', JSON.stringify(updatedRecordings));
+    };
+
     return (
         <div className="voice-recorder-app">
             <div className="voice-recorder-header">
@@ -50,11 +69,17 @@ const VoiceRecorder = ({ onClose, onMinimize }) => {
                 <button onClick={isRecording ? stopRecording : startRecording}>
                     {isRecording ? 'Stop Recording' : 'Start Recording'}
                 </button>
-                {audioURL && (
-                    <audio controls src={audioURL}>
-                        Your browser does not support the audio element.
-                    </audio>
-                )}
+                <div className="recordings-list">
+                    {recordings.map(recording => (
+                        <div key={recording.id} className="recording-item">
+                            <audio controls src={recording.url}>
+                                Your browser does not support the audio element.
+                            </audio>
+                            <span>{recording.name}</span>
+                            <button onClick={() => deleteRecording(recording.id)}>Delete</button>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
