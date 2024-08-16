@@ -11,6 +11,7 @@ import Reminders from './components/Reminders';
 import Settings from './components/Settings';
 import AppWindow from './components/AppWindow';
 import SearchBar from './components/SearchBar';
+import Taskbar from './components/Taskbar';
 
 const initialApps = [
   { id: 'calculator', name: 'Calculator', icon: '🧮' },
@@ -29,18 +30,10 @@ const AppIcon = ({ app, onClick, style, ...props }) => (
   </div>
 );
 
-const Dock = ({ apps, onClick, iconStyle }) => (
-  <div className="dock">
-    {apps.map(app => (
-      <AppIcon key={app.id} app={app} onClick={onClick} style={iconStyle} />
-    ))}
-  </div>
-);
-
 function App() {
   const [apps, setApps] = useState(initialApps);
-  const [activeApp, setActiveApp] = useState(null);
-  const [isAppOpen, setIsAppOpen] = useState(false);
+  const [openApps, setOpenApps] = useState([]);
+  const [activeAppId, setActiveAppId] = useState(null);
   const [settings, setSettings] = useState({
     backgroundColor: '#1e1e1e',
     backgroundImage: '',
@@ -59,20 +52,26 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    if (activeApp) {
-      setIsAppOpen(true);
-    } else {
-      setTimeout(() => setIsAppOpen(false), 300);
-    }
-  }, [activeApp]);
-
   const launchApp = (appId) => {
-    setActiveApp(appId);
+    if (!openApps.includes(appId)) {
+      setOpenApps([...openApps, appId]);
+    }
+    setActiveAppId(appId);
   };
 
-  const closeApp = () => {
-    setActiveApp(null);
+  const closeApp = (appId) => {
+    setOpenApps(openApps.filter(id => id !== appId));
+    if (activeAppId === appId) {
+      setActiveAppId(openApps.length > 1 ? openApps[openApps.length - 2] : null);
+    }
+  };
+
+  const minimizeApp = () => {
+    setActiveAppId(null);
+  };
+
+  const focusApp = (appId) => {
+    setActiveAppId(appId);
   };
 
   const updateSettings = (newSettings) => {
@@ -100,15 +99,15 @@ function App() {
     localStorage.setItem('appOrder', JSON.stringify(newApps));
   };
 
-  const renderActiveApp = () => {
-    switch (activeApp) {
-      case 'calculator': return <Calculator onClose={closeApp} />;
-      case 'weather': return <Weather onClose={closeApp} />;
-      case 'timer': return <Timer onClose={closeApp} />;
-      case 'stopwatch': return <Stopwatch onClose={closeApp} />;
-      case 'clock': return <Clock onClose={closeApp} />;
-      case 'reminders': return <Reminders onClose={closeApp} />;
-      case 'settings': return <Settings onClose={closeApp} updateSettings={updateSettings} />;
+  const renderApp = (appId) => {
+    switch (appId) {
+      case 'calculator': return <Calculator onClose={() => closeApp(appId)} onMinimize={minimizeApp} />;
+      case 'weather': return <Weather onClose={() => closeApp(appId)} onMinimize={minimizeApp} />;
+      case 'timer': return <Timer onClose={() => closeApp(appId)} onMinimize={minimizeApp} />;
+      case 'stopwatch': return <Stopwatch onClose={() => closeApp(appId)} onMinimize={minimizeApp} />;
+      case 'clock': return <Clock onClose={() => closeApp(appId)} onMinimize={minimizeApp} />;
+      case 'reminders': return <Reminders onClose={() => closeApp(appId)} onMinimize={minimizeApp} />;
+      case 'settings': return <Settings onClose={() => closeApp(appId)} onMinimize={minimizeApp} updateSettings={updateSettings} />;
       default: return null;
     }
   };
@@ -128,7 +127,7 @@ function App() {
     <div className={`dashboard ${settings.isDarkMode ? 'dark-mode' : 'light-mode'}`} style={dashboardStyle}>
       <SearchBar onSearch={handleSearch} />
       <main className="dashboard-main">
-        {!activeApp && (
+        {openApps.length === 0 && (
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="app-grid" direction="horizontal">
               {(provided) => (
@@ -156,11 +155,23 @@ function App() {
             </Droppable>
           </DragDropContext>
         )}
-        <AppWindow isOpen={isAppOpen}>
-          {renderActiveApp()}
-        </AppWindow>
+        {openApps.map(appId => (
+          <AppWindow
+            key={appId}
+            isOpen={true}
+            isActive={activeAppId === appId}
+            onFocus={() => focusApp(appId)}
+          >
+            {renderApp(appId)}
+          </AppWindow>
+        ))}
       </main>
-      <Dock apps={apps} onClick={launchApp} iconStyle={appIconStyle} />
+      <Taskbar
+        openApps={openApps.map(id => apps.find(app => app.id === id))}
+        activeAppId={activeAppId}
+        onAppClick={focusApp}
+        onAppClose={closeApp}
+      />
     </div>
   );
 }

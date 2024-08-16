@@ -1,7 +1,8 @@
+// src/components/AppWindow.jsx
 import React, { useState, useEffect } from 'react';
 import './AppWindow.css';
 
-const AppWindow = ({ children, isOpen, onClose }) => {
+const AppWindow = ({ children, isOpen, isActive, onFocus }) => {
   const [animationClass, setAnimationClass] = useState('');
 
   useEffect(() => {
@@ -15,7 +16,10 @@ const AppWindow = ({ children, isOpen, onClose }) => {
   }, [isOpen]);
 
   return (
-    <div className={`app-window ${animationClass}`}>
+    <div
+      className={`app-window ${animationClass} ${isActive ? 'active' : ''}`}
+      onClick={onFocus}
+    >
       {children}
     </div>
   );
