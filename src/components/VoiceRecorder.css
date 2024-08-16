@@ -1,0 +1,55 @@
+.voice-recorder-app {
+    width: 300px;
+    height: 200px;
+    background-color: #1C1C1C;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.voice-recorder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #2D2D2D;
+}
+
+.voice-recorder-header h2 {
+    margin: 0;
+    color: white;
+}
+
+.voice-recorder-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.voice-recorder-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 50px);
+    padding: 20px;
+}
+
+.voice-recorder-content button {
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.voice-recorder-content button:hover {
+    background-color: #45a049;
+}
+
+.voice-recorder-content audio {
+    width: 100%;
+}

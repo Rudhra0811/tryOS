@@ -10,6 +10,7 @@ import Clock from './components/Clock';
 import Reminders from './components/Reminders';
 import Settings from './components/Settings';
 import Camera from './components/Camera';
+import VoiceRecorder from './components/VoiceRecorder';
 import AppWindow from './components/AppWindow';
 import SearchBar from './components/SearchBar';
 import Taskbar from './components/Taskbar';
@@ -23,6 +24,7 @@ const initialApps = [
   { id: 'reminders', name: 'Reminders', icon: '📝' },
   { id: 'settings', name: 'Settings', icon: '⚙️' },
   { id: 'camera', name: 'Camera', icon: '📷' },
+  { id: 'voice-recorder', name: 'Voice Recorder', icon: '🎙️' },
 ];
 
 const AppIcon = ({ app, onClick, style, ...props }) => (
@@ -111,6 +113,7 @@ function App() {
       case 'reminders': return <Reminders onClose={() => closeApp(appId)} onMinimize={minimizeApp} />;
       case 'settings': return <Settings onClose={() => closeApp(appId)} onMinimize={minimizeApp} updateSettings={updateSettings} />;
       case 'camera': return <Camera onClose={() => closeApp(appId)} onMinimize={minimizeApp} />;
+      case 'voice-recorder': return <VoiceRecorder onClose={() => closeApp(appId)} onMinimize={minimizeApp} />;
       default: return null;
     }
   };
