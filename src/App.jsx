@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Calculator from './components/Calculator';
@@ -7,6 +6,7 @@ import Timer from './components/Timer';
 import Stopwatch from './components/Stopwatch';
 import Clock from './components/Clock';
 import Reminders from './components/Reminders';
+import Settings from './components/Settings';
 import AppWindow from './components/AppWindow';
 
 const apps = [
@@ -16,25 +16,22 @@ const apps = [
   { id: 'stopwatch', name: 'Stopwatch', icon: '⏱️' },
   { id: 'clock', name: 'Clock', icon: '🕰️' },
   { id: 'reminders', name: 'Reminders', icon: '📝' },
+  { id: 'settings', name: 'Settings', icon: '⚙️' },
 ];
 
-const SearchBar = () => (
-  <div className="search-bar">
-    <input type="text" placeholder="Search" />
-  </div>
-);
-
-const AppIcon = ({ app, onClick }) => (
-  <div className="app-icon" onClick={() => onClick(app.id)}>
+// Define the AppIcon component
+const AppIcon = ({ app, onClick, style }) => (
+  <div className="app-icon" onClick={() => onClick(app.id)} style={style}>
     <span className="app-icon-emoji">{app.icon}</span>
     <span className="app-icon-name">{app.name}</span>
   </div>
 );
 
-const Dock = ({ apps, onClick }) => (
+// Define the Dock component
+const Dock = ({ apps, onClick, iconStyle }) => (
   <div className="dock">
     {apps.map(app => (
-      <AppIcon key={app.id} app={app} onClick={onClick} />
+      <AppIcon key={app.id} app={app} onClick={onClick} style={iconStyle} />
     ))}
   </div>
 );
@@ -42,6 +39,17 @@ const Dock = ({ apps, onClick }) => (
 function App() {
   const [activeApp, setActiveApp] = useState(null);
   const [isAppOpen, setIsAppOpen] = useState(false);
+  const [settings, setSettings] = useState({
+    backgroundColor: '#1e1e1e',
+    backgroundImage: '',
+    iconSize: 'medium',
+    isDarkMode: true,
+  });
+
+  useEffect(() => {
+    const savedSettings = JSON.parse(localStorage.getItem('dashboardSettings')) || {};
+    setSettings({ ...settings, ...savedSettings });
+  }, []);
 
   useEffect(() => {
     if (activeApp) {
@@ -59,6 +67,10 @@ function App() {
     setActiveApp(null);
   };
 
+  const updateSettings = (newSettings) => {
+    setSettings(newSettings);
+  };
+
   const renderActiveApp = () => {
     switch (activeApp) {
       case 'calculator': return <Calculator onClose={closeApp} />;
@@ -67,18 +79,29 @@ function App() {
       case 'stopwatch': return <Stopwatch onClose={closeApp} />;
       case 'clock': return <Clock onClose={closeApp} />;
       case 'reminders': return <Reminders onClose={closeApp} />;
+      case 'settings': return <Settings onClose={closeApp} updateSettings={updateSettings} />;
       default: return null;
     }
   };
 
+  const dashboardStyle = {
+    backgroundColor: settings.backgroundImage ? 'transparent' : settings.backgroundColor,
+    backgroundImage: settings.backgroundImage ? `url(${settings.backgroundImage})` : 'none',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  };
+
+  const appIconStyle = {
+    fontSize: settings.iconSize === 'small' ? '24px' : settings.iconSize === 'large' ? '48px' : '36px',
+  };
+
   return (
-    <div className="dashboard">
-      <SearchBar />
+    <div className={`dashboard ${settings.isDarkMode ? 'dark-mode' : 'light-mode'}`} style={dashboardStyle}>
       <main className="dashboard-main">
         {!activeApp && (
           <div className="app-grid">
             {apps.map((app) => (
-              <AppIcon key={app.id} app={app} onClick={launchApp} />
+              <AppIcon key={app.id} app={app} onClick={launchApp} style={appIconStyle} />
             ))}
           </div>
         )}
@@ -86,7 +109,7 @@ function App() {
           {renderActiveApp()}
         </AppWindow>
       </main>
-      <Dock apps={apps} onClick={launchApp} />
+      <Dock apps={apps} onClick={launchApp} iconStyle={appIconStyle} />
     </div>
   );
 }

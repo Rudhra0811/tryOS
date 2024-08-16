@@ -123,3 +123,17 @@ body {
   background-color: #2D2D2D;
   color: white;
 }
+
+.dashboard.light-mode {
+  background-color: #f0f0f0;
+  color: #1e1e1e;
+}
+
+.dashboard.dark-mode {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+.app-icon {
+  transition: all 0.3s ease;
+}
