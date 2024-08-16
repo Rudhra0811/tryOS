@@ -8,6 +8,7 @@ import Clock from './components/Clock';
 import Reminders from './components/Reminders';
 import Settings from './components/Settings';
 import AppWindow from './components/AppWindow';
+import SearchBar from './components/SearchBar';
 
 const apps = [
   { id: 'calculator', name: 'Calculator', icon: '🧮' },
@@ -19,7 +20,6 @@ const apps = [
   { id: 'settings', name: 'Settings', icon: '⚙️' },
 ];
 
-// Define the AppIcon component
 const AppIcon = ({ app, onClick, style }) => (
   <div className="app-icon" onClick={() => onClick(app.id)} style={style}>
     <span className="app-icon-emoji">{app.icon}</span>
@@ -27,7 +27,6 @@ const AppIcon = ({ app, onClick, style }) => (
   </div>
 );
 
-// Define the Dock component
 const Dock = ({ apps, onClick, iconStyle }) => (
   <div className="dock">
     {apps.map(app => (
@@ -45,6 +44,7 @@ function App() {
     iconSize: 'medium',
     isDarkMode: true,
   });
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const savedSettings = JSON.parse(localStorage.getItem('dashboardSettings')) || {};
@@ -70,6 +70,14 @@ function App() {
   const updateSettings = (newSettings) => {
     setSettings(newSettings);
   };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const filteredApps = apps.filter(app =>
+    app.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const renderActiveApp = () => {
     switch (activeApp) {
@@ -97,10 +105,11 @@ function App() {
 
   return (
     <div className={`dashboard ${settings.isDarkMode ? 'dark-mode' : 'light-mode'}`} style={dashboardStyle}>
+      <SearchBar onSearch={handleSearch} />
       <main className="dashboard-main">
         {!activeApp && (
           <div className="app-grid">
-            {apps.map((app) => (
+            {filteredApps.map((app) => (
               <AppIcon key={app.id} app={app} onClick={launchApp} style={appIconStyle} />
             ))}
           </div>
