@@ -1,0 +1,41 @@
+/* src/components/Camera.css */
+.camera-app {
+    width: 640px;
+    height: 480px;
+    background-color: #1C1C1C;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.camera-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #2D2D2D;
+}
+
+.camera-header h2 {
+    margin: 0;
+    color: white;
+}
+
+.camera-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.camera-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100% - 50px);
+}
+
+.camera-content video {
+    max-width: 100%;
+    max-height: 100%;
+}

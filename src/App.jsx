@@ -9,6 +9,7 @@ import Stopwatch from './components/Stopwatch';
 import Clock from './components/Clock';
 import Reminders from './components/Reminders';
 import Settings from './components/Settings';
+import Camera from './components/Camera';
 import AppWindow from './components/AppWindow';
 import SearchBar from './components/SearchBar';
 import Taskbar from './components/Taskbar';
@@ -21,6 +22,7 @@ const initialApps = [
   { id: 'clock', name: 'Clock', icon: '🕰️' },
   { id: 'reminders', name: 'Reminders', icon: '📝' },
   { id: 'settings', name: 'Settings', icon: '⚙️' },
+  { id: 'camera', name: 'Camera', icon: '📷' },
 ];
 
 const AppIcon = ({ app, onClick, style, ...props }) => (
@@ -108,6 +110,7 @@ function App() {
       case 'clock': return <Clock onClose={() => closeApp(appId)} onMinimize={minimizeApp} />;
       case 'reminders': return <Reminders onClose={() => closeApp(appId)} onMinimize={minimizeApp} />;
       case 'settings': return <Settings onClose={() => closeApp(appId)} onMinimize={minimizeApp} updateSettings={updateSettings} />;
+      case 'camera': return <Camera onClose={() => closeApp(appId)} onMinimize={minimizeApp} />;
       default: return null;
     }
   };
